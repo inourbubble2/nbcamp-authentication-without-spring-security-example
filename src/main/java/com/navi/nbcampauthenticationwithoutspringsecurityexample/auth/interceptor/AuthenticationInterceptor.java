@@ -1,6 +1,7 @@
 package com.navi.nbcampauthenticationwithoutspringsecurityexample.auth.interceptor;
 
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.auth.annotation.Authenticated;
+import com.navi.nbcampauthenticationwithoutspringsecurityexample.auth.context.AuthenticationContext;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.auth.util.JwtUtil;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.entity.User;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.repository.UserRepository;
@@ -17,6 +18,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
+    private final AuthenticationContext authenticationContext;
+
     private final JwtUtil jwtUtil;
 
     private final UserRepository userRepository;
@@ -31,7 +34,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             User user = userRepository.findById(Long.parseLong(subject))
                 .orElseThrow(() -> new IllegalArgumentException("user not exists."));
 
-            request.setAttribute("user", user);
+            authenticationContext.setPrincipal(user);
             return true;
         }
 
