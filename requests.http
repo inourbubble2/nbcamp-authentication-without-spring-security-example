@@ -1,0 +1,32 @@
+### Register
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "username",
+  "password": "password"
+}
+
+<> 2024-10-29T200501.200.json
+<> 2024-10-29T200409.200.json
+
+### Login
+POST http://localhost:8080/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "username",
+  "password": "password"
+}
+> {%
+  client.global.set("token", response.body)
+%}
+
+<> 2024-10-29T200503.200.txt
+<> 2024-10-29T200411.200.txt
+<> 2024-10-29T200202.200.txt
+
+
+### Get Authenticated User
+GET http://localhost:8080/api/users/authenticated
+Authorization: Bearer {{token}}
