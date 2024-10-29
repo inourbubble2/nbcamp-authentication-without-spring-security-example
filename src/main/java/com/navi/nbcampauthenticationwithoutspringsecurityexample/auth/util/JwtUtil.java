@@ -1,6 +1,8 @@
 package com.navi.nbcampauthenticationwithoutspringsecurityexample.auth.util;
 
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.entity.User;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -36,5 +38,20 @@ public class JwtUtil {
             .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiresIn))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
+    }
+
+    public String extractSubject(String accessToken) {
+        try {
+            return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getSubject();
+        } catch (ExpiredJwtException e) {
+            throw new IllegalStateException("token is expired");
+        } catch (JwtException e) {
+            throw new IllegalStateException("token is not valid");
+        }
     }
 }
