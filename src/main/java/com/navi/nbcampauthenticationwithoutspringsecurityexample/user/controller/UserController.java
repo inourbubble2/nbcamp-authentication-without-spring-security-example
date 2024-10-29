@@ -4,7 +4,9 @@ import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.entity.Use
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.model.UserRegisterRequest;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.model.UserResponse;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,12 @@ public class UserController {
             new User(request.username(), request.password())
         );
 
+        return new UserResponse(user.getId(), user.getUsername());
+    }
+
+    @GetMapping("/api/users/authenticated")
+    public UserResponse getAuthenticatedUser(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
         return new UserResponse(user.getId(), user.getUsername());
     }
 
