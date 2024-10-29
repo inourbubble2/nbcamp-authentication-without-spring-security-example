@@ -1,5 +1,6 @@
 package com.navi.nbcampauthenticationwithoutspringsecurityexample.user.controller;
 
+import com.navi.nbcampauthenticationwithoutspringsecurityexample.auth.annotation.Authenticated;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.entity.User;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.model.UserRegisterRequest;
 import com.navi.nbcampauthenticationwithoutspringsecurityexample.user.model.UserResponse;
@@ -30,6 +31,7 @@ public class UserController {
         return new UserResponse(user.getId(), user.getUsername());
     }
 
+    @Authenticated
     @GetMapping("/api/users/authenticated")
     public UserResponse getAuthenticatedUser(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
